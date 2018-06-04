@@ -1,6 +1,6 @@
 /*
  * author: jinwei
- * date  : {{.Date}}
+ * date  : {{Time2Date .Date}}
  */
 
 package main
@@ -12,17 +12,18 @@ import (
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	pb "{{.PathPrefix}}/{{.ModuleName}}"
+    "strconv"
+	pb "{{.PrefixFromGoPath}}/{{.ModuleName}}"
 )
 
 const (
-    SVR_IP = {{.SvrIp}}
+    SVR_IP = "{{.SvrIp}}"
     SVR_PORT = {{.SvrPort}}
 )
 
 func main() {
 	// Set up a connection to the server.
-    address := SVR_IP + ":" + SVR_PORT
+    address := SVR_IP + ":" + strconv.FormatUint(uint64(SVR_PORT), 10)
     conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
