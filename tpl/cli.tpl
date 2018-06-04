@@ -7,13 +7,11 @@ package main
 
 import (
 	"log"
-	"os"
 	"time"
-
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
     "strconv"
-	pb "{{.PrefixFromGoPath}}/{{.ModuleName}}"
+	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/pb"
 )
 
 const (
@@ -29,7 +27,7 @@ func main() {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	c := pb.New{{.ModuleName}}Client(conn)
+	c := pb.New{{.ProjName}}Client(conn)
 
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
@@ -40,5 +38,5 @@ func main() {
 		log.Fatalf("could not greet: %v", err)
 	}
     */
-	log.Printf("Greeting: %s", r.Message)
+	// log.Printf("Greeting: %s", r.Message)
 }
