@@ -77,6 +77,9 @@ func PathExist(path string) bool {
 	if err == nil {
 		return true
 	} else {
+		if os.IsExist(err) {
+			return true
+		}
 		return false
 	}
 }
@@ -181,6 +184,10 @@ func GetSvrMainFilePath(svrDir string) string {
 	return svrDir + "/svr_main.go"
 }
 
+func GetHandlerFilePath(handlerDir string) string {
+	return handlerDir + "/handler.go"
+}
+
 // 获取CliTool相关文件
 func GetCliToolMainFilePath(cliToolDir string) string {
 	return cliToolDir + "/cli_tool_main.go"
@@ -210,6 +217,14 @@ func GetTagSegBegin4PbService() string {
 
 func GetTagSegEnd4PbService() string {
 	return fmt.Sprintf(TAG_SEGMENT_END_TMPL, "PB", "SERVICE")
+}
+
+func GetTagSegBegin4HandlerImpl() string {
+	return fmt.Sprintf(TAG_SEGMENT_BEGIN_TMPL, "HANDLER", "IMPL")
+}
+
+func GetTagSegEnd4HandlerImpl() string {
+	return fmt.Sprintf(TAG_SEGMENT_END_TMPL, "HANDLER", "IMPL")
 }
 
 // 获取PB内容模版

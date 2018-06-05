@@ -13,4 +13,8 @@ const (
 	// PB tmpl
 	CONTENT_TMPL_PB_MSG     = "message %s {\n\t//TODO\n}"
 	CONTENT_TMPL_PB_SERVICE = "rpc %s (%s) returns (%s) {}"
+
+	// handler impl
+	CONTENT_TMPL_HANDLER_HEADER = "package handler\nimport (\n\t\"golang.org/x/net/context\"\n\t\"%s\"\n)\n\ntype RpcHandler struct {\n}\n\nfunc NewRpcHandler() *RpcHandler {\n\treturn &RpcHandler{}\n}\n" // import pb
+	CONTENT_TMPL_HANDLER_IMPL   = "func (this *RpcHandler) %s (ctx context.Context, in *pb.%s) (out *pb.%s, err error) {\n\t//TODO\n\treturn\n}"
 )

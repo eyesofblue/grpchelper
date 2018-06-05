@@ -1,8 +1,10 @@
 package logic
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/eyesofblue/grpchelper/comm"
+	"os"
 )
 
 func AddProtoFile(rpcName string) {
@@ -28,17 +30,46 @@ func AddProtoFile(rpcName string) {
 	comm.Insert2File(pbFile, serviceContent, serviceTargetLine, true)
 }
 
-func AddHandlerFile() {
-	pbDir := comm.GetPbDir(".")
-	if !comm.PathExist(pbDir) {
-		panic("pb Dir Not Found")
+func CreateHandlerFile(handlerFile string) {
+	mainDirFromGoSrcPath, err := comm.GetPrefixFromGoSrcPath()
+	if err != nil {
+		panic(err)
 	}
 
-	pbFile := comm.GetPbFilePath(pbDir)
-	if !comm.PathExist(pbFile) {
-		tmpErr := fmt.Sprintf("%s File Not Found", pbFile)
-		panic(tmpErr)
+	pbDirFromGoSrcPath := comm.GetPbDir(mainDirFromGoSrcPath)
+	content := fmt.Sprintf(comm.CONTENT_TMPL_HANDLER_HEADER, pbDirFromGoSrcPath)
+	content += "\n" + fmt.Sprintf("%s\n\n%s", comm.GetTagSegBegin4HandlerImpl(), comm.GetTagSegEnd4HandlerImpl())
+
+	file, err := os.OpenFile(handlerFile, os.O_EXCL|os.O_CREATE|os.O_RDWR, 0644)
+	if err != nil {
+		panic(err)
 	}
+	fileWriter := bufio.NewWriter(file)
+	fileWriter.WriteString(content)
+	fileWriter.Flush()
+
+	file.Close()
+}
+
+func AddHandlerFile(rpcName string) {
+	handlerDir := comm.GetHandlerDir(".")
+	if !comm.PathExist(handlerDir) {
+		panic("svr/handler Dir Not Found")
+	}
+
+	handlerFile := comm.GetHandlerFilePath(handlerDir)
+	if !comm.PathExist(handlerFile) {
+		// handle.go不存在 创建初始模版
+		CreateHandlerFile(handlerFile)
+		// svr_main.go中增加handler的import
+		// TODO
+	}
+
+	// add handler impl
+	handlerImplTargetLine := comm.GetTagSegEnd4HandlerImpl()
+	handlerImplContent := fmt.Sprintf(comm.CONTENT_TMPL_HANDLER_IMPL, rpcName, comm.GetRpcReqName(rpcName), comm.GetRpcRspName(rpcName))
+	// fmt.Printf("%s\n", handlerImplTargetLine)
+	comm.Insert2File(handlerFile, handlerImplContent, handlerImplTargetLine, true)
 }
 
 func AddSvrMainFile() {
@@ -47,5 +78,6 @@ func AddSvrMainFile() {
 
 func Add(interfaceName string) {
 	rpcName := comm.CapitalizeStr(interfaceName)
-	AddProtoFile(rpcName)
+	// AddProtoFile(rpcName)
+	AddHandlerFile(rpcName)
 }

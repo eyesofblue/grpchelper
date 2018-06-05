@@ -28,6 +28,8 @@ func Insert2File(fileName string, content string, targetLine string, insertBefor
 			panic(err)
 		}
 
+		fmt.Printf("line:%s\n, targetLine:%s, equal:%b\n", line, targetLine, strings.Contains(line, targetLine))
+
 		if strings.Contains(line, targetLine) {
 			if insertBefore {
 				result += content + line
@@ -40,7 +42,6 @@ func Insert2File(fileName string, content string, targetLine string, insertBefor
 	}
 
 	f.Close()
-
 	// 先写新文件
 	newFileName := fileName + ".new"
 	newf, err := os.OpenFile(newFileName, os.O_EXCL|os.O_CREATE|os.O_RDWR, 0644)
