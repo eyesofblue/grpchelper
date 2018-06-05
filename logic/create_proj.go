@@ -30,32 +30,25 @@ func CreateTpl(tplPath string, tplData *model.TplModel, outPath string) {
 	}
 }
 
-func Create(moduleName string) {
+func Create(rawName string) {
 	// 创建相关文件夹
-	dirName, err := comm.ModuleName2DirName(moduleName)
-	if err != nil {
-		panic(err)
+	mainDir := comm.GetMainDir(rawName)
+	if comm.PathExist(mainDir) {
+		panic("Module Exists")
 	}
-	currentDir := comm.GetCurrentDirectory()
-	mainDir := currentDir + "/" + dirName
-	pbDir := mainDir + "/pb"
-	publicDir := mainDir + "/public"
-	svrDir := mainDir + "/svr"
-	cliToolDir := mainDir + "/cli_tool"
-	handlerDir := svrDir + "/handler"
-	stubDir := cliToolDir + "/stub"
 
-	err = comm.MakeDir(mainDir)
+	pbDir := comm.GetPbDir(mainDir)
+	svrDir := comm.GetSvrDir(mainDir)
+	cliToolDir := comm.GetCliToolDir(mainDir)
+	handlerDir := comm.GetHandlerDir(mainDir)
+	stubDir := comm.GetStubDir(mainDir)
+
+	err := comm.MakeDir(mainDir)
 	if err != nil {
 		panic(err)
 	}
 
 	err = comm.MakeDir(pbDir)
-	if err != nil {
-		panic(err)
-	}
-
-	err = comm.MakeDir(publicDir)
 	if err != nil {
 		panic(err)
 	}
@@ -81,7 +74,7 @@ func Create(moduleName string) {
 	}
 
 	// 模版数据组装
-	projName, err := comm.ModuleName2ProjName(moduleName)
+	projName, err := comm.RawName2ProjName(rawName)
 	if err != nil {
 		panic(err)
 	}
@@ -91,7 +84,8 @@ func Create(moduleName string) {
 	}
 	tplData := model.NewTplModel()
 	tplData.Date = time.Now()
-	tplData.ModuleName = moduleName
+	tplData.RawName = rawName
+	dirName, _ := comm.RawName2DirName(rawName)
 	tplData.DirName = dirName
 	tplData.ProjName = projName
 	tplData.PrefixFromGoSrcPath = prefixFromGoSrcPath
@@ -100,22 +94,17 @@ func Create(moduleName string) {
 	tplData.SvrPort = 9999
 
 	// 创建PB文件
-	pbFilePath := pbDir + "/" + moduleName + ".proto"
+	pbPath := comm.GetPbFilePath(pbDir)
 	pbTplPath := comm.GetTplPath4Pb()
-	CreateTpl(pbTplPath, tplData, pbFilePath)
+	CreateTpl(pbTplPath, tplData, pbPath)
 
 	// 创建svr_main文件
-	svrMainPath := svrDir + "/" + moduleName + "_svr.go"
+	svrMainPath := comm.GetSvrMainFilePath(svrDir)
 	svrTplPath := comm.GetTplPath4Svr()
 	CreateTpl(svrTplPath, tplData, svrMainPath)
 
-	// 创建const文件
-	constFilePath := publicDir + "/const.go"
-	constTplPath := comm.GetTplPath4Const()
-	CreateTpl(constTplPath, tplData, constFilePath)
-
 	// 创建cli_tool_main文件
-	cliToolMainPath := cliToolDir + "/" + moduleName + "_cli_tool.go"
+	cliToolMainPath := comm.GetCliToolMainFilePath(cliToolDir)
 	cliTplPath := comm.GetTplPath4Cli()
 	CreateTpl(cliTplPath, tplData, cliToolMainPath)
 }

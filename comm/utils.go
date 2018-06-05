@@ -2,6 +2,7 @@ package comm
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -29,6 +30,7 @@ func GetGoSrcPath() string {
 	return goPath + "/src"
 }
 
+// 获取模版路径
 func GetTplPath() string {
 	return GetGoSrcPath() + "/github.com/eyesofblue/grpchelper/tpl"
 }
@@ -43,10 +45,6 @@ func GetTplPath4Svr() string {
 
 func GetTplPath4Cli() string {
 	return GetTplPath() + "/cli.tpl"
-}
-
-func GetTplPath4Const() string {
-	return GetTplPath() + "/const.tpl"
 }
 
 func GetCurrentDirectory() string {
@@ -91,9 +89,9 @@ func MakeDir(path string) error {
 	return os.MkdirAll(path, 0755)
 }
 
-func IsValidModuleName(moduleName string) bool {
+func IsValidRawName(rawName string) bool {
 	pattern := `[^a-zA-Z_]+`
-	return !regexp.MustCompile(pattern).MatchString(moduleName)
+	return !regexp.MustCompile(pattern).MatchString(rawName)
 }
 
 //abc_def_g ->AbcDefG
@@ -116,8 +114,8 @@ func CapitalizeStr(str string) string {
 	return upperStr
 }
 
-func ModuleName2ProjName(moduleName string) (string, error) {
-	if IsValidModuleName(moduleName) == false {
+func RawName2ProjName(moduleName string) (string, error) {
+	if IsValidRawName(moduleName) == false {
 		return "", errors.New("Invalid moduleName")
 	}
 
@@ -129,8 +127,8 @@ func ModuleName2ProjName(moduleName string) (string, error) {
 	return ret, nil
 }
 
-func ModuleName2DirName(moduleName string) (string, error) {
-	if IsValidModuleName(moduleName) == false {
+func RawName2DirName(moduleName string) (string, error) {
+	if IsValidRawName(moduleName) == false {
 		return "", errors.New("Invalid moduleName")
 	}
 
@@ -140,4 +138,86 @@ func ModuleName2DirName(moduleName string) (string, error) {
 	}
 
 	return ret, nil
+}
+
+// 获取项目目录
+func GetMainDir(rawName string) string {
+	dirName, err := RawName2DirName(rawName)
+	if err != nil {
+		panic(err)
+	}
+	currentDir := GetCurrentDirectory()
+	mainDir := currentDir + "/" + dirName
+	return mainDir
+}
+
+func GetPbDir(mainDir string) string {
+	return mainDir + "/pb"
+}
+
+func GetSvrDir(mainDir string) string {
+	return mainDir + "/svr"
+}
+
+func GetCliToolDir(mainDir string) string {
+	return mainDir + "/cli_tool"
+}
+
+func GetHandlerDir(mainDir string) string {
+	return mainDir + "/svr/handler"
+}
+
+func GetStubDir(mainDir string) string {
+	return mainDir + "/cli_tool/stub"
+}
+
+// 获取PB相关文件
+func GetPbFilePath(pbDir string) string {
+	return pbDir + "/service.proto"
+}
+
+// 获取Svr相关文件
+func GetSvrMainFilePath(svrDir string) string {
+	return svrDir + "/svr_main.go"
+}
+
+// 获取CliTool相关文件
+func GetCliToolMainFilePath(cliToolDir string) string {
+	return cliToolDir + "/cli_tool_main.go"
+}
+
+// 获取rpc入参出参名称
+func GetRpcReqName(rpcName string) string {
+	return rpcName + "Request"
+}
+
+func GetRpcRspName(rpcName string) string {
+	return rpcName + "Response"
+}
+
+// 获取各种锚定Tag
+func GetTagSegBegin4PbMsg() string {
+	return fmt.Sprintf(TAG_SEGMENT_BEGIN_TMPL, "PB", "MESSAGE")
+}
+
+func GetTagSegEnd4PbMsg() string {
+	return fmt.Sprintf(TAG_SEGMENT_END_TMPL, "PB", "MESSAGE")
+}
+
+func GetTagSegBegin4PbService() string {
+	return fmt.Sprintf(TAG_SEGMENT_BEGIN_TMPL, "PB", "SERVICE")
+}
+
+func GetTagSegEnd4PbService() string {
+	return fmt.Sprintf(TAG_SEGMENT_END_TMPL, "PB", "SERVICE")
+}
+
+// 获取PB内容模版
+func GetContentTmpl4PbMsg(rpcName string) string {
+	ret := fmt.Sprintf(CONTENT_TMPL_PB_MSG, GetRpcReqName(rpcName)) + "\n" + fmt.Sprintf(CONTENT_TMPL_PB_MSG, GetRpcRspName(rpcName))
+	return ret
+}
+
+func GetContentTmpl4PbService(rpcName string) string {
+	return fmt.Sprintf(CONTENT_TMPL_PB_SERVICE, rpcName, GetRpcReqName(rpcName), GetRpcRspName(rpcName))
 }

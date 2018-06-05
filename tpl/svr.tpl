@@ -10,10 +10,10 @@ import (
 	"google.golang.org/grpc"
 	"net"
 	"os"
-	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/pb"
     "strconv"
     log "github.com/cihub/seelog"
-	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/public"
+    "github.com/eyesofblue/grpchelper/public"
+	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/pb"
 )
 
 const (
