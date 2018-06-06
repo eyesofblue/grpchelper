@@ -1,17 +1,12 @@
-/*
- * author: jinwei
- * date  : {{Time2Date .Date}}
- */
-
 package main
 
 import (
 	"log"
-	"time"
-	"golang.org/x/net/context"
+	"github.com/eyesofblue/grpchelper/logic"
 	"google.golang.org/grpc"
     "strconv"
 	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/pb"
+	_ "{{.PrefixFromGoSrcPath}}/{{.DirName}}/cli_tool/stub"
 )
 
 const (
@@ -28,15 +23,6 @@ func main() {
 	}
 	defer conn.Close()
 	c := pb.New{{.ProjName}}Client(conn)
-
-	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-	/*
-    r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
-	if err != nil {
-		log.Fatalf("could not greet: %v", err)
-	}
-    */
-	// log.Printf("Greeting: %s", r.Message)
+    logic.ClientStub(c) 
 }
+

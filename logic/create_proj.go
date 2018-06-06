@@ -93,18 +93,28 @@ func Create(rawName string) {
 	tplData.SvrIp = "127.0.0.1"
 	tplData.SvrPort = 9999
 
-	// 创建PB文件
+	// 创建pb/service.proto文件
 	pbPath := comm.GetPbFilePath(pbDir)
 	pbTplPath := comm.GetTplPath4Pb()
 	CreateTpl(pbTplPath, tplData, pbPath)
 
-	// 创建svr_main文件
+	// 创建svr/svr_main.go文件
 	svrMainPath := comm.GetSvrMainFilePath(svrDir)
 	svrTplPath := comm.GetTplPath4Svr()
 	CreateTpl(svrTplPath, tplData, svrMainPath)
 
-	// 创建cli_tool_main文件
+	// 创建svr/handler/handler.go文件
+	handlerPath := comm.GetHandlerFilePath(handlerDir)
+	handlerTplPath := comm.GetTplPath4Handler()
+	CreateTpl(handlerTplPath, tplData, handlerPath)
+
+	// 创建cli_tool/cli_tool_main.go文件
 	cliToolMainPath := comm.GetCliToolMainFilePath(cliToolDir)
 	cliTplPath := comm.GetTplPath4Cli()
 	CreateTpl(cliTplPath, tplData, cliToolMainPath)
+
+	// 创建cli_tool/stub/stub.go文件
+	stubPath := comm.GetStubFilePath(stubDir)
+	stubTplPath := comm.GetTplPath4Stub()
+	CreateTpl(stubTplPath, tplData, stubPath)
 }

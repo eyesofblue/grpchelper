@@ -1,8 +1,8 @@
 package comm
 
 const (
-	CMD_CREATEPROJ         = "create"
-	CMD_ADDINTERFACE       = "addinterface"
+	CMD_CREATEPROJ         = "new"
+	CMD_ADDINTERFACE       = "addrpc"
 	TAG_SEGMENT_BEGIN_TMPL = "// <DO NOT MODIFY THIS LINE> __GRPC_HELPER_SEGMENT_%s_%s_BEGIN__" // file_func
 	TAG_SEGMENT_END_TMPL   = "// <DO NOT MODIFY THIS LINE> __GRPC_HELPER_SEGMENT_%s_%s_END__"   // file_func
 
@@ -12,7 +12,7 @@ const (
 
 	// PB tmpl
 	CONTENT_TMPL_PB_MSG     = "message %s {\n\t//TODO\n}"
-	CONTENT_TMPL_PB_SERVICE = "rpc %s (%s) returns (%s) {}"
+	CONTENT_TMPL_PB_SERVICE = "\trpc %s (%s) returns (%s) {}"
 
 	// handler impl
 	CONTENT_TMPL_HANDLER_HEADER = "package handler\nimport (\n\t\"golang.org/x/net/context\"\n\t\"%s\"\n)\n\ntype RpcHandler struct {\n}\n\nfunc NewRpcHandler() *RpcHandler {\n\treturn &RpcHandler{}\n}\n" // import pb

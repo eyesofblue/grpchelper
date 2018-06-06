@@ -47,6 +47,14 @@ func GetTplPath4Cli() string {
 	return GetTplPath() + "/cli.tpl"
 }
 
+func GetTplPath4Handler() string {
+	return GetTplPath() + "/handler.tpl"
+}
+
+func GetTplPath4Stub() string {
+	return GetTplPath() + "/stub.tpl"
+}
+
 func GetCurrentDirectory() string {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
@@ -191,6 +199,10 @@ func GetHandlerFilePath(handlerDir string) string {
 // 获取CliTool相关文件
 func GetCliToolMainFilePath(cliToolDir string) string {
 	return cliToolDir + "/cli_tool_main.go"
+}
+
+func GetStubFilePath(stubDir string) string {
+	return stubDir + "/stub.go"
 }
 
 // 获取rpc入参出参名称

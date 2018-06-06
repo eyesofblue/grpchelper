@@ -1,8 +1,3 @@
-/*
- * author: jinwei
- * date  : {{Time2Date .Date}}
- */
-
 package main
 
 import (
@@ -14,6 +9,7 @@ import (
     log "github.com/cihub/seelog"
     "github.com/eyesofblue/grpchelper/public"
 	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/pb"
+	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/svr/handler"
 )
 
 const (
@@ -30,18 +26,9 @@ func init() {
 	log.ReplaceLogger(logger)
 }
 
-type server struct{}
-
-/*
-func (s *server) RawSend(ctx context.Context, in *pb.RawSendReq) (*pb.RawSendRsp, error) {
-	// TODO
-	return logic.DoSend(in)
-}
-*/
 
 func main() {
 	defer log.Flush()
-
 	// 创建监听端口
     address := SVR_IP + ":" + strconv.FormatUint(uint64(SVR_PORT), 10)
 	lis, err := net.Listen("tcp", address)
@@ -52,8 +39,10 @@ func main() {
 	// 创建grpc服务器实例
 	grpcSvr := grpc.NewServer()
 	// 将自己的服务器实现注册到grpc服务器上
-	pb.Register{{.ProjName}}Server(grpcSvr, &server{})
+    server := handler.NewRpcHandler()
+	pb.Register{{.ProjName}}Server(grpcSvr, server)
 	// 开启服务
     log.Tracef("Sever Start. Address:%s", address)
 	grpcSvr.Serve(lis)
 }
+

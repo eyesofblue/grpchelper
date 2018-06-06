@@ -9,7 +9,7 @@ import (
 )
 
 func usage() {
-	fmt.Printf("Usage: %s -c [cmd<create|addinterface>] -n [name]\n", os.Args[0])
+	fmt.Printf("Usage: %s -c [cmd<%s|%s>] -n [name]\n", os.Args[0], comm.CMD_CREATEPROJ, comm.CMD_ADDINTERFACE)
 }
 
 func doCreate(rawName string) {

@@ -2,7 +2,7 @@ package comm
 
 import (
 	"bufio"
-	"fmt"
+	// "fmt"
 	"io"
 	"os"
 	"strings"
@@ -15,7 +15,7 @@ func Insert2File(fileName string, content string, targetLine string, insertBefor
 		panic(err)
 	}
 
-	content = strings.TrimSpace(content)
+	content = strings.TrimRight(content, "\n")
 	content = content + "\n" + "\n"
 	fileReader := bufio.NewReader(f)
 	var result string
@@ -27,8 +27,6 @@ func Insert2File(fileName string, content string, targetLine string, insertBefor
 			}
 			panic(err)
 		}
-
-		fmt.Printf("line:%s\n, targetLine:%s, equal:%b\n", line, targetLine, strings.Contains(line, targetLine))
 
 		if strings.Contains(line, targetLine) {
 			if insertBefore {
