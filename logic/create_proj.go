@@ -94,27 +94,32 @@ func Create(rawName string) {
 	tplData.SvrPort = 9999
 
 	// 创建pb/service.proto文件
-	pbPath := comm.GetPbFilePath(pbDir)
+	pbFilePath := comm.GetPbFilePath(pbDir)
 	pbTplPath := comm.GetTplPath4Pb()
-	CreateTpl(pbTplPath, tplData, pbPath)
+	CreateTpl(pbTplPath, tplData, pbFilePath)
 
 	// 创建svr/svr_main.go文件
-	svrMainPath := comm.GetSvrMainFilePath(svrDir)
+	svrMainFilePath := comm.GetSvrMainFilePath(svrDir)
 	svrTplPath := comm.GetTplPath4Svr()
-	CreateTpl(svrTplPath, tplData, svrMainPath)
+	CreateTpl(svrTplPath, tplData, svrMainFilePath)
 
 	// 创建svr/handler/handler.go文件
-	handlerPath := comm.GetHandlerFilePath(handlerDir)
+	handlerFilePath := comm.GetHandlerFilePath(handlerDir)
 	handlerTplPath := comm.GetTplPath4Handler()
-	CreateTpl(handlerTplPath, tplData, handlerPath)
+	CreateTpl(handlerTplPath, tplData, handlerFilePath)
 
 	// 创建cli_tool/cli_tool_main.go文件
-	cliToolMainPath := comm.GetCliToolMainFilePath(cliToolDir)
+	cliToolMainFilePath := comm.GetCliToolMainFilePath(cliToolDir)
 	cliTplPath := comm.GetTplPath4Cli()
-	CreateTpl(cliTplPath, tplData, cliToolMainPath)
+	CreateTpl(cliTplPath, tplData, cliToolMainFilePath)
 
 	// 创建cli_tool/stub/stub.go文件
-	stubPath := comm.GetStubFilePath(stubDir)
+	stubFilePath := comm.GetStubFilePath(stubDir)
 	stubTplPath := comm.GetTplPath4Stub()
-	CreateTpl(stubTplPath, tplData, stubPath)
+	CreateTpl(stubTplPath, tplData, stubFilePath)
+
+	// build.sh文件
+	buildFilePath := comm.GetBuildFilePath(mainDir)
+	buildTplPath := comm.GetTplPath4Build()
+	comm.CopyFile(buildFilePath, buildTplPath)
 }

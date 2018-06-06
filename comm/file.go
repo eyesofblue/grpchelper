@@ -8,6 +8,24 @@ import (
 	"strings"
 )
 
+func CopyFile(dstName, srcName string) {
+	src, err := os.Open(srcName)
+	if err != nil {
+		panic(err)
+	}
+	defer src.Close()
+	dst, err := os.OpenFile(dstName, os.O_WRONLY|os.O_CREATE, 0755)
+	if err != nil {
+		panic(err)
+	}
+	defer dst.Close()
+
+	_, err = io.Copy(dst, src)
+	if err != nil {
+		panic(err)
+	}
+}
+
 // 在文件targetLine后插入文本content
 func Insert2File(fileName string, content string, targetLine string, insertBefore bool) {
 	f, err := os.Open(fileName)

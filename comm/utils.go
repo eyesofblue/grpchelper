@@ -55,6 +55,10 @@ func GetTplPath4Stub() string {
 	return GetTplPath() + "/stub.tpl"
 }
 
+func GetTplPath4Build() string {
+	return GetTplPath() + "/build.tpl"
+}
+
 func GetCurrentDirectory() string {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
@@ -203,6 +207,10 @@ func GetCliToolMainFilePath(cliToolDir string) string {
 
 func GetStubFilePath(stubDir string) string {
 	return stubDir + "/stub.go"
+}
+
+func GetBuildFilePath(mainDir string) string {
+	return mainDir + "/build.sh"
 }
 
 // 获取rpc入参出参名称
