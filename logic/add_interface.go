@@ -1,10 +1,8 @@
 package logic
 
 import (
-	// "bufio"
 	"fmt"
 	"github.com/eyesofblue/grpchelper/comm"
-	// "os"
 )
 
 func AddProtoFile(rpcName string) {
@@ -71,12 +69,33 @@ func AddHandlerFile(rpcName string) {
 	comm.Insert2File(handlerFile, handlerImplContent, handlerImplTargetLine, true)
 }
 
-func AddSvrMainFile() {
+func AddStubFile(rpcName string) {
+	stubDir := comm.GetStubDir(".")
+	if !comm.PathExist(stubDir) {
+		panic("cli_tool/stub Dir Not Found")
+	}
 
+	stubFile := comm.GetStubFilePath(stubDir)
+	if !comm.PathExist(stubFile) {
+		tmpErr := fmt.Sprintf("%s File Not Found", stubFile)
+		panic(tmpErr)
+	}
+
+	rpcReqName := comm.GetRpcReqName(rpcName)
+	// add newreq seg
+	newReqTargetLine := comm.GetTagSegEnd4StubNewReq()
+	newReqContent := fmt.Sprintf(comm.CONTENT_TMPL_STUB_NEWREQ, rpcReqName, rpcReqName)
+	comm.Insert2File(stubFile, newReqContent, newReqTargetLine, true)
+
+	// add register seg
+	registerTargetLine := comm.GetTagSegEnd4StubRegister()
+	registerContent := fmt.Sprintf(comm.CONTENT_TMPL_STUB_REGISTER, rpcName, rpcReqName)
+	comm.Insert2File(stubFile, registerContent, registerTargetLine, true)
 }
 
 func Add(interfaceName string) {
 	rpcName := comm.CapitalizeStr(interfaceName)
 	AddProtoFile(rpcName)
 	AddHandlerFile(rpcName)
+	AddStubFile(rpcName)
 }

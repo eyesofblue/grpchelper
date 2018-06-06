@@ -239,6 +239,22 @@ func GetTagSegEnd4HandlerImpl() string {
 	return fmt.Sprintf(TAG_SEGMENT_END_TMPL, "HANDLER", "IMPL")
 }
 
+func GetTagSegBegin4StubNewReq() string {
+	return fmt.Sprintf(TAG_SEGMENT_BEGIN_TMPL, "STUB", "NEWREQ")
+}
+
+func GetTagSegEnd4StubNewReq() string {
+	return fmt.Sprintf(TAG_SEGMENT_END_TMPL, "STUB", "NEWREQ")
+}
+
+func GetTagSegBegin4StubRegister() string {
+	return fmt.Sprintf(TAG_SEGMENT_BEGIN_TMPL, "STUB", "REGISTER")
+}
+
+func GetTagSegEnd4StubRegister() string {
+	return fmt.Sprintf(TAG_SEGMENT_END_TMPL, "STUB", "REGISTER")
+}
+
 // 获取PB内容模版
 func GetContentTmpl4PbMsg(rpcName string) string {
 	ret := fmt.Sprintf(CONTENT_TMPL_PB_MSG, GetRpcReqName(rpcName)) + "\n" + fmt.Sprintf(CONTENT_TMPL_PB_MSG, GetRpcRspName(rpcName))

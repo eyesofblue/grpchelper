@@ -10,10 +10,13 @@ import (
 
 func NewEchoRequest(jsonReq []byte) interface{} {
 	req := &pb.EchoRequest{}
-	err := json.Unmarshal(jsonReq, req)
-	if err != nil {
-		panic(err)
-	}
+	
+    if len(jsonReq) > 0 {
+        err := json.Unmarshal(jsonReq, req)
+	    if err != nil {
+		    panic(err)
+	    }
+    }
 
 	return req
 }
