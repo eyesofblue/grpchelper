@@ -15,11 +15,11 @@ const (
 	CONTENT_TMPL_PB_SERVICE = "\trpc %s (%s) returns (%s) {}"
 
 	// handler impl
-	CONTENT_TMPL_HANDLER_HEADER = "package handler\nimport (\n\t\"golang.org/x/net/context\"\n\t\"%s\"\n)\n\ntype RpcHandler struct {\n}\n\nfunc NewRpcHandler() *RpcHandler {\n\treturn &RpcHandler{}\n}\n" // import pb
-	CONTENT_TMPL_HANDLER_IMPL   = "func (this *RpcHandler) %s (ctx context.Context, in *pb.%s) (out *pb.%s, err error) {\n\t//TODO\n\treturn\n}"
+	// CONTENT_TMPL_HANDLER_HEADER = "package handler\nimport (\n\t\"golang.org/x/net/context\"\n\t\"%s\"\n)\n\ntype RpcHandler struct {\n}\n\nfunc NewRpcHandler() *RpcHandler {\n\treturn &RpcHandler{}\n}\n" // import pb
+	CONTENT_TMPL_HANDLER_IMPL = "func (this *RpcHandler) %s (ctx context.Context, in *pb.%s) (out *pb.%s, err error) {\n\t//TODO\n\terr = errors.New(\"TODO\")\n\treturn\n}"
 
 	// stub newreq
-	CONTENT_TMPL_STUB_NEWREQ = "func New%s(jsonReq []byte) interface{} {\n\treq := &pb.%s{}\n\n\tif len(jsonReq) > 0 {\n\t\terr := json.Unmarshal(jsonReq, req)\n\t\tif err != nil {\n\t\t\tpanic(err)\n\t\t}\n\t}\n\treturn req\n}"
+	CONTENT_TMPL_STUB_NEWREQ = "func New%s() interface{} {\n\treturn &pb.%s{}\n}"
 	// stub register
 	CONTENT_TMPL_STUB_REGISTER = "\tlogic.RegisterReqNew(\"%s\", New%s)"
 )

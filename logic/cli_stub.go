@@ -13,9 +13,9 @@ import (
 )
 
 // rpcRequest注册生成函数
-var reqNewMap = make(map[string]func([]byte) interface{})
+var reqNewMap = make(map[string]func() interface{})
 
-func RegisterReqNew(methodName string, implFunc func([]byte) interface{}) {
+func RegisterReqNew(methodName string, implFunc func() interface{}) {
 	reqNewMap[methodName] = implFunc
 }
 
@@ -57,10 +57,12 @@ func CallByMethodName(st interface{}, methodName string, strJsonReq string) ([]r
 		return nil, errors.New(tmpMsg)
 	}
 
-	req := reqImplFunc([]byte(strJsonReq))
-	if req == nil {
-		tmpMsg := fmt.Sprintf("[JsonUnmarshal Failed]:%s", strJsonReq)
-		return nil, errors.New(tmpMsg)
+	req := reqImplFunc()
+	if len(strJsonReq) > 0 {
+		err := json.Unmarshal([]byte(strJsonReq), req)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
@@ -93,7 +95,12 @@ func ClientStub(st interface{}) {
 
 	// 所有rpc接口一共只有两个返回值 rsp和error
 	if retList[1].IsNil() {
-		rsp, err := json.MarshalIndent(retList[0].Interface(), "", "    ")
+		var rsp []byte
+		if retList[0].IsNil() {
+			rsp, err = json.MarshalIndent("{}", "", "    ")
+		} else {
+			rsp, err = json.MarshalIndent(retList[0].Interface(), "", "    ")
+		}
 		if err != nil {
 			panic(err)
 		}

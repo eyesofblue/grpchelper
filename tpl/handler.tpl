@@ -1,6 +1,7 @@
 package handler
 import (
-	"golang.org/x/net/context"
+	"errors"
+    "golang.org/x/net/context"
 	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/pb"
 )
 
@@ -15,6 +16,8 @@ func NewRpcHandler() *RpcHandler {
 
 func (this *RpcHandler) Echo (ctx context.Context, in *pb.EchoRequest) (out *pb.EchoResponse, err error) {
 	out = &pb.EchoResponse{Msg:in.Msg}
+    err = errors.New("TODO")        // Fuck "Import But Not Use"
+    err = nil
     return 
 }
 
