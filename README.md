@@ -6,8 +6,8 @@
 当然protoc帮我们做了很多事情，且生成了<br>
 
 > module_name<br>
-> > pb<br>
-> > > service.proto<br>
+>   |-pb<br>
+>     |-service.proto<br>
     |-svr<br>
         |-svr_main.go<br>
         |-handler<br>
