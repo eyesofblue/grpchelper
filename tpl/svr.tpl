@@ -4,7 +4,6 @@ import (
 	"google.golang.org/grpc"
 	"log"
     "net"
-	"os"
     "strconv"
 	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/pb"
 	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/svr/handler"
