@@ -41,7 +41,7 @@ grpchelper -c new -n [your_proj_name] -i [ip] -p [port]
 这是一个空项目，包含一个Echo的rpc接口<br>
 此时项目是可以编译通过的，执行build.sh会生成bin文件夹，其中含有一个svrmain的服务器bin程序和一个clitool的客户端调试程序<br>
 
-### 新增一个接口
+#### 新增一个接口
 在项目的根目录下，执行<br>
 ```go
 grpchelper -c addrpc -n [rpc_name]
