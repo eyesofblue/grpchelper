@@ -20,10 +20,14 @@
 go get -u github.com/eyesofblue/grpchelper
 ```
 ### 使用<br>
-
-> module_name<br>
->   |-pb<br>
->     |-service.proto<br>
+#### 创建一个项目
+```go
+grpchelper -c new -n [your_proj_name] -i [ip] -p [port]
+```
+工具会自动生成如下代码结构
+> yourprojname<br>
+&emsp;&emsp;&emsp;&emsp;|-pb<br>
+&emsp;&emsp;&emsp;&emsp;|-service.proto<br>
     |-svr<br>
         |-svr_main.go<br>
         |-handler<br>

@@ -9,7 +9,7 @@ import (
 )
 
 func usage() {
-	fmt.Printf("Usage: \n\t%s -c %s -n [name] -i [ip] -p [port]\t\t/*创建一个新工程*/\n\t%s -c %s -n [name]\t\t\t/*增加一个新接口*/\n", os.Args[0], comm.CMD_CREATEPROJ, os.Args[0], comm.CMD_ADDINTERFACE)
+	fmt.Printf("Usage: \n\t%s -c %s -n [name] -i [ip] -p [port]\t\t/*创建一个新工程*/\n\t%s -c %s -n [name]\t\t\t\t/*增加一个新接口*/\n", os.Args[0], comm.CMD_CREATEPROJ, os.Args[0], comm.CMD_ADDINTERFACE)
 }
 
 func doCreate(rawName string, ip string, port uint) {
