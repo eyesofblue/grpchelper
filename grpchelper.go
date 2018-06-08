@@ -9,11 +9,11 @@ import (
 )
 
 func usage() {
-	fmt.Printf("Usage: %s -c [cmd<%s|%s>] -n [name]\n", os.Args[0], comm.CMD_CREATEPROJ, comm.CMD_ADDINTERFACE)
+	fmt.Printf("Usage: \n\t%s -c %s -n [name] -i [ip] -p [port]\t\t/*创建一个新工程*/\n\t%s -c %s -n [name]\t\t\t/*增加一个新接口*/\n", os.Args[0], comm.CMD_CREATEPROJ, os.Args[0], comm.CMD_ADDINTERFACE)
 }
 
-func doCreate(rawName string) {
-	logic.Create(rawName)
+func doCreate(rawName string, ip string, port uint) {
+	logic.Create(rawName, ip, port)
 }
 
 func doAdd(rawName string) {
@@ -26,6 +26,12 @@ func main() {
 	var cmd string
 	flag.StringVar(&cmd, "c", "", "cmd")
 
+	var ip string
+	flag.StringVar(&ip, "i", "", "ip")
+
+	var port uint
+	flag.UintVar(&port, "p", 10317, "port")
+
 	flag.Parse()
 
 	if !comm.IsValidRawName(rawName) {
@@ -34,7 +40,7 @@ func main() {
 	}
 	switch cmd {
 	case comm.CMD_CREATEPROJ:
-		doCreate(rawName)
+		doCreate(rawName, ip, port)
 	case comm.CMD_ADDINTERFACE:
 		doAdd(rawName)
 	default:

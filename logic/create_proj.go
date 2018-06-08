@@ -30,7 +30,7 @@ func CreateTpl(tplPath string, tplData *model.TplModel, outPath string) {
 	}
 }
 
-func Create(rawName string) {
+func Create(rawName string, ip string, port uint) {
 	// 创建相关文件夹
 	mainDir := comm.GetMainDir(rawName)
 	if comm.PathExist(mainDir) {
@@ -89,9 +89,8 @@ func Create(rawName string) {
 	tplData.DirName = dirName
 	tplData.ProjName = projName
 	tplData.PrefixFromGoSrcPath = prefixFromGoSrcPath
-	// FIXME
-	tplData.SvrIp = "127.0.0.1"
-	tplData.SvrPort = 9999
+	tplData.SvrIp = ip
+	tplData.SvrPort = uint32(port)
 
 	// 创建pb/service.proto文件
 	pbFilePath := comm.GetPbFilePath(pbDir)

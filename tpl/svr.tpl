@@ -1,13 +1,11 @@
 package main
 
 import (
-	// "golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"net"
+	"log"
+    "net"
 	"os"
     "strconv"
-    log "github.com/cihub/seelog"
-    "github.com/eyesofblue/grpchelper/public"
 	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/pb"
 	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/svr/handler"
 )
@@ -17,24 +15,12 @@ const (
     SVR_PORT = {{.SvrPort}}
 )
 
-func init() {
-	logger, err := log.LoggerFromConfigAsString(public.FileLogConfig)
-	if err != nil {
-		log.Critical("Failed to parse config params")
-		return
-	}
-	log.ReplaceLogger(logger)
-}
-
-
 func main() {
-	defer log.Flush()
 	// 创建监听端口
     address := SVR_IP + ":" + strconv.FormatUint(uint64(SVR_PORT), 10)
 	lis, err := net.Listen("tcp", address)
 	if err != nil {
-		log.Errorf("Failed to Listen. msg:%s", err)
-		os.Exit(-1)
+		log.Fatalf("Failed to Listen. msg:%s", err)
 	}
 	// 创建grpc服务器实例
 	grpcSvr := grpc.NewServer()
@@ -42,7 +28,6 @@ func main() {
     server := handler.NewRpcHandler()
 	pb.Register{{.ProjName}}Server(grpcSvr, server)
 	// 开启服务
-    log.Tracef("Sever Start. Address:%s", address)
 	grpcSvr.Serve(lis)
 }
 

@@ -3,8 +3,6 @@ module
     |-pb
         |-$module.proto
         |-$module.pb.go
-    |-public
-        |-log_config.go
     |-svr
         |-$module_svr.go
         |-handler
