@@ -24,7 +24,7 @@ go get -u github.com/eyesofblue/grpchelper
 ```go
 grpchelper -c new -n [your_proj_name] -i [ip] -p [port]
 ```
-工具会自动生成如下代码结构
+工具会自动生成如下代码结构<br>
 > yourprojname<br>
 &emsp;&emsp;|-pb<br>
 &emsp;&emsp;&emsp;&emsp;|-service.proto<br>
@@ -42,20 +42,20 @@ grpchelper -c new -n [your_proj_name] -i [ip] -p [port]
 此时项目是可以编译通过的，执行build.sh会生成bin文件夹，其中含有一个svrmain的服务器bin程序和一个clitool的客户端调试程序<br>
 
 ### 新增一个接口
-在项目的根目录下，执行
+在项目的根目录下，执行<br>
 ```go
 grpchelper -c addrpc -n [rpc_name]
 ```
-工具会做的事情：
-&emsp;&emsp;1、自动在pb/service.proto文件中声明相关message和service
-&emsp;&emsp;2、自动在svr/handle/handler.go文件中添加相关rpc函数的声明
-&emsp;&emsp;3、自动在cli_tool/stub/stub.go文件中添加相关客户端桩代码，注册对应rpc函数
-你只需要做：
-&emsp;&emsp;1、在pb/service.proto文件中定义数据结构
-&emsp;&emsp;2、在svr/handle/handler.go文件中对应rpc函数内实现业务逻辑
+工具会做的事情：<br>
+&emsp;&emsp;1、自动在pb/service.proto文件中声明相关message和service<br>
+&emsp;&emsp;2、自动在svr/handle/handler.go文件中添加相关rpc函数的声明<br>
+&emsp;&emsp;3、自动在cli_tool/stub/stub.go文件中添加相关客户端桩代码，注册对应rpc函数<br>
+你只需要做：<br>
+&emsp;&emsp;1、在pb/service.proto文件中定义数据结构<br>
+&emsp;&emsp;2、在svr/handle/handler.go文件中对应rpc函数内实现业务逻辑<br>
 
 ### 客户端调试程序
-工具会在bin目录下自动生成名为clitool的客户端调试程序，可以方便对各个rpc接口进行调试
+工具会在bin目录下自动生成名为clitool的客户端调试程序，可以方便对各个rpc接口进行调试<br>
 ```go
 clitool -f rpcname -d 'json_req'
 ```
