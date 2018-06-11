@@ -145,9 +145,8 @@ func Add(interfaceName string) {
 		panic(tmpErr)
 	}
 
-	/*
-		AddProtoFile(rpcName)
-		AddHandlerFile(rpcName)
-		AddStubFile(rpcName)
-	*/
+	AddProtoFile(rpcName)
+	AddHandlerFile(rpcName)
+	AddStubFile(rpcName)
+
 }
