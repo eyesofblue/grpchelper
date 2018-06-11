@@ -48,11 +48,11 @@ grpchelper -c addrpc -n [rpc_name]
 ```
 工具会做的事情：<br>
 &emsp;&emsp;1、自动在pb/service.proto文件中声明相关message和service<br>
-&emsp;&emsp;2、自动在svr/handle/handler.go文件中添加相关rpc函数的声明<br>
+&emsp;&emsp;2、自动在svr/handler/handler.go文件中添加相关rpc函数的声明<br>
 &emsp;&emsp;3、自动在cli_tool/stub/stub.go文件中添加相关客户端桩代码，注册对应rpc函数<br>
 你只需要做：<br>
 &emsp;&emsp;1、在pb/service.proto文件中定义数据结构<br>
-&emsp;&emsp;2、在svr/handle/handler.go文件中对应rpc函数内实现业务逻辑<br>
+&emsp;&emsp;2、在svr/handler/handler.go文件中对应rpc函数内实现业务逻辑<br>
 
 ### 客户端调试程序
 工具会在bin目录下自动生成名为clitool的客户端调试程序，可以方便对各个rpc接口进行调试<br>

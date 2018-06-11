@@ -26,15 +26,19 @@ func CopyFile(dstName, srcName string) {
 	}
 }
 
+type InsertItem struct {
+	TargetLine   string
+	Content      string
+	InsertBefore bool
+}
+
 // 在文件targetLine后插入文本content
-func Insert2File(fileName string, content string, targetLine string, insertBefore bool) {
+func Insert2File(fileName string, insertList []*InsertItem) {
 	f, err := os.Open(fileName)
 	if err != nil {
 		panic(err)
 	}
 
-	content = strings.TrimRight(content, "\n")
-	content = content + "\n" + "\n"
 	fileReader := bufio.NewReader(f)
 	var result string
 	for {
@@ -46,13 +50,25 @@ func Insert2File(fileName string, content string, targetLine string, insertBefor
 			panic(err)
 		}
 
-		if strings.Contains(line, targetLine) {
-			if insertBefore {
-				result += content + line
-			} else {
-				result += line + content
+		isContain := false
+		for _, insertItem := range insertList {
+			targetLine := insertItem.TargetLine
+			content := insertItem.Content
+			content = strings.TrimRight(content, "\n")
+			content = content + "\n" + "\n"
+
+			if strings.Contains(line, targetLine) {
+				isContain = true
+				if insertItem.InsertBefore {
+					result += content + line
+				} else {
+					result += line + content
+				}
+				break
 			}
-		} else {
+		}
+
+		if !isContain {
 			result += line
 		}
 	}

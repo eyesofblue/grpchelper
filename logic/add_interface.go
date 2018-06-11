@@ -1,9 +1,53 @@
 package logic
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/eyesofblue/grpchelper/comm"
+	"io"
+	"os"
+	"regexp"
 )
+
+func IsRpcExist(rpcName string) bool {
+	isExist := false
+
+	pbDir := comm.GetPbDir(".")
+	if !comm.PathExist(pbDir) {
+		panic("pb Dir Not Found")
+	}
+
+	pbFile := comm.GetPbFilePath(pbDir)
+	if !comm.PathExist(pbFile) {
+		tmpErr := fmt.Sprintf("%s File Not Found", pbFile)
+		panic(tmpErr)
+	}
+
+	pattern := fmt.Sprintf(comm.SERVICE_EXIST_FLAG, rpcName, comm.GetRpcReqName(rpcName), comm.GetRpcRspName(rpcName))
+
+	f, err := os.Open(pbFile)
+	if err != nil {
+		panic(err)
+	}
+
+	fileReader := bufio.NewReader(f)
+	for {
+		line, err := fileReader.ReadString('\n')
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			panic(err)
+		}
+
+		if regexp.MustCompile(pattern).MatchString(line) {
+			isExist = true
+			break
+		}
+	}
+
+	return isExist
+}
 
 func AddProtoFile(rpcName string) {
 	pbDir := comm.GetPbDir(".")
@@ -17,15 +61,14 @@ func AddProtoFile(rpcName string) {
 		panic(tmpErr)
 	}
 
-	// add msg define seg
-	msgTargetLine := comm.GetTagSegEnd4PbMsg()
-	msgContent := comm.GetContentTmpl4PbMsg(rpcName)
-	comm.Insert2File(pbFile, msgContent, msgTargetLine, true)
+	insertList := make([]*comm.InsertItem, 0)
 
+	// add msg define seg
+	insertList = append(insertList, &comm.InsertItem{TargetLine: comm.GetTagSegEnd4PbMsg(), Content: comm.GetContentTmpl4PbMsg(rpcName), InsertBefore: true})
 	// add service define seg
-	serviceTargetLine := comm.GetTagSegEnd4PbService()
-	serviceContent := comm.GetContentTmpl4PbService(rpcName)
-	comm.Insert2File(pbFile, serviceContent, serviceTargetLine, true)
+	insertList = append(insertList, &comm.InsertItem{TargetLine: comm.GetTagSegEnd4PbService(), Content: comm.GetContentTmpl4PbService(rpcName), InsertBefore: true})
+
+	comm.Insert2File(pbFile, insertList)
 }
 
 /*
@@ -63,10 +106,12 @@ func AddHandlerFile(rpcName string) {
 		panic(tmpErr)
 	}
 
+	insertList := make([]*comm.InsertItem, 0)
+
 	// add handler impl
-	handlerImplTargetLine := comm.GetTagSegEnd4HandlerImpl()
-	handlerImplContent := fmt.Sprintf(comm.CONTENT_TMPL_HANDLER_IMPL, rpcName, comm.GetRpcReqName(rpcName), comm.GetRpcRspName(rpcName))
-	comm.Insert2File(handlerFile, handlerImplContent, handlerImplTargetLine, true)
+	insertList = append(insertList, &comm.InsertItem{TargetLine: comm.GetTagSegEnd4HandlerImpl(), Content: fmt.Sprintf(comm.CONTENT_TMPL_HANDLER_IMPL, rpcName, comm.GetRpcReqName(rpcName), comm.GetRpcRspName(rpcName)), InsertBefore: true})
+
+	comm.Insert2File(handlerFile, insertList)
 }
 
 func AddStubFile(rpcName string) {
@@ -82,20 +127,27 @@ func AddStubFile(rpcName string) {
 	}
 
 	rpcReqName := comm.GetRpcReqName(rpcName)
-	// add newreq seg
-	newReqTargetLine := comm.GetTagSegEnd4StubNewReq()
-	newReqContent := fmt.Sprintf(comm.CONTENT_TMPL_STUB_NEWREQ, rpcReqName, rpcReqName)
-	comm.Insert2File(stubFile, newReqContent, newReqTargetLine, true)
 
+	insertList := make([]*comm.InsertItem, 0)
+
+	// add newreq seg
+	insertList = append(insertList, &comm.InsertItem{TargetLine: comm.GetTagSegEnd4StubNewReq(), Content: fmt.Sprintf(comm.CONTENT_TMPL_STUB_NEWREQ, rpcReqName, rpcReqName), InsertBefore: true})
 	// add register seg
-	registerTargetLine := comm.GetTagSegEnd4StubRegister()
-	registerContent := fmt.Sprintf(comm.CONTENT_TMPL_STUB_REGISTER, rpcName, rpcReqName)
-	comm.Insert2File(stubFile, registerContent, registerTargetLine, true)
+	insertList = append(insertList, &comm.InsertItem{TargetLine: comm.GetTagSegEnd4StubRegister(), Content: fmt.Sprintf(comm.CONTENT_TMPL_STUB_REGISTER, rpcName, rpcReqName), InsertBefore: true})
+
+	comm.Insert2File(stubFile, insertList)
 }
 
 func Add(interfaceName string) {
 	rpcName := comm.CapitalizeStr(interfaceName)
-	AddProtoFile(rpcName)
-	AddHandlerFile(rpcName)
-	AddStubFile(rpcName)
+	if IsRpcExist(rpcName) {
+		tmpErr := fmt.Sprintf("rpc %s exists", rpcName)
+		panic(tmpErr)
+	}
+
+	/*
+		AddProtoFile(rpcName)
+		AddHandlerFile(rpcName)
+		AddStubFile(rpcName)
+	*/
 }
