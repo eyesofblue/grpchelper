@@ -65,7 +65,7 @@ func CallByMethodName(st interface{}, methodName string, strJsonReq string) ([]r
 		}
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second * 10)
 	defer cancel()
 
 	// 所有rpc接口一共只有两个入参 ctx和req
