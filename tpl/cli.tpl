@@ -18,7 +18,7 @@ const (
 func main() {
 	// Set up a connection to the server.
     address := SVR_IP + ":" + strconv.FormatUint(uint64(SVR_PORT), 10)
-    ctx = context.Background()
+    ctx := context.Background()
     conn, err := grpc.DialContext(ctx, address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
