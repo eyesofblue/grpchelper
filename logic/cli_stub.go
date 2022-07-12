@@ -6,10 +6,9 @@ import (
 	"flag"
 	"fmt"
 	"github.com/eyesofblue/grpchelper/comm"
-	"golang.org/x/net/context"
+	"context"
 	"os"
 	"reflect"
-	"time"
 )
 
 // rpcRequest注册生成函数
@@ -42,7 +41,7 @@ func ShowFuncList(st interface{}) string {
 	return ret
 }
 
-func CallByMethodName(st interface{}, methodName string, strJsonReq string) ([]reflect.Value, error) {
+func CallByMethodName(ctx context.Context, st interface{}, methodName string, strJsonReq string) ([]reflect.Value, error) {
 	v := reflect.ValueOf(st).MethodByName(methodName)
 
 	if !v.IsValid() {
@@ -65,10 +64,7 @@ func CallByMethodName(st interface{}, methodName string, strJsonReq string) ([]r
 		}
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second * 10)
-	defer cancel()
-
-	// 所有rpc接口一共只有两个入参 ctx和req
+	// todo 目前rpc接口一共只有两个入参 ctx和req  gRpc的一些CallOption参数后续要带进来
 	params := make([]reflect.Value, 2)
 	params[0] = reflect.ValueOf(ctx)
 	params[1] = reflect.ValueOf(req)
@@ -76,7 +72,7 @@ func CallByMethodName(st interface{}, methodName string, strJsonReq string) ([]r
 	return v.Call(params), nil
 }
 
-func ClientStub(st interface{}) {
+func ClientStub(ctx context.Context, st interface{}) {
 	var methodName string
 	flag.StringVar(&methodName, "f", "", "methodName")
 
@@ -85,7 +81,7 @@ func ClientStub(st interface{}) {
 
 	flag.Parse()
 
-	retList, err := CallByMethodName(st, methodName, jsonReq)
+	retList, err := CallByMethodName(ctx, st, methodName, jsonReq)
 
 	if err != nil {
 		fmt.Println(err)
