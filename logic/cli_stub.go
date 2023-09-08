@@ -1,12 +1,12 @@
 package logic
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
 	"github.com/eyesofblue/grpchelper/comm"
-	"context"
 	"os"
 	"reflect"
 )
@@ -60,7 +60,7 @@ func CallByMethodName(ctx context.Context, st interface{}, methodName string, st
 	if len(strJsonReq) > 0 {
 		err := json.Unmarshal([]byte(strJsonReq), req)
 		if err != nil {
-			panic(err)
+			panic(errors.New("json req invalid:" + err.Error()))
 		}
 	}
 
