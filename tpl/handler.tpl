@@ -6,6 +6,7 @@ import (
 )
 
 type RpcHandler struct {
+	*pb.Unimplemented{{.ProjName}}Server
 }
 
 func NewRpcHandler() *RpcHandler {

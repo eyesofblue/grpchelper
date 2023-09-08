@@ -1,5 +1,6 @@
 syntax = "proto3";
 package pb;
+option go_package = "/pb;pb";
 
 // <DO NOT MODIFY THIS LINE> __GRPC_HELPER_SEGMENT_PB_MESSAGE_BEGIN__
 
