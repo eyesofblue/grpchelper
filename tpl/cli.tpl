@@ -6,8 +6,8 @@ import (
 	"google.golang.org/grpc"
 	"context"
     "strconv"
-	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/pb"
-	_ "{{.PrefixFromGoSrcPath}}/{{.DirName}}/cli_tool/stub"
+	"{{.GoModulePath}}/pb"
+	_ "{{.GoModulePath}}/cli_tool/stub"
 )
 
 const (

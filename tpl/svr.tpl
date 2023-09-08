@@ -5,8 +5,8 @@ import (
 	"log"
     "net"
     "strconv"
-	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/pb"
-	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/svr/handler"
+	"{{.GoModulePath}}/pb"
+	"{{.GoModulePath}}/svr/handler"
 )
 
 const (

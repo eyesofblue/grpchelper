@@ -4,6 +4,7 @@ import (
 	"github.com/eyesofblue/grpchelper/comm"
 	"github.com/eyesofblue/grpchelper/model"
 	"os"
+	"os/exec"
 	"strings"
 	tpl "text/template"
 	"time"
@@ -31,8 +32,12 @@ func CreateTpl(tplPath string, tplData *model.TplModel, outPath string) {
 }
 
 func Create(rawName string, ip string, port uint) {
+	//rawName可以是一个path
+	//rawName整体作为go mod init的参数，用于指定go mod init的根目录
+	//rawName路径的最后一个dir作为项目的dir
+	lastDir := comm.GetLastDirFromPath(rawName)
 	// 创建相关文件夹
-	mainDir := comm.GetMainDir(rawName)
+	mainDir := comm.GetMainDir(lastDir)
 	if comm.PathExist(mainDir) {
 		panic("Module Exists")
 	}
@@ -44,6 +49,14 @@ func Create(rawName string, ip string, port uint) {
 	stubDir := comm.GetStubDir(mainDir)
 
 	err := comm.MakeDir(mainDir)
+	if err != nil {
+		panic(err)
+	}
+
+	// 执行go mod init
+	cmdStr := "cd " + mainDir + "; go mod init " + rawName
+	cmd := exec.Command("/bin/bash", "-c", cmdStr)
+	err = cmd.Run()
 	if err != nil {
 		panic(err)
 	}
@@ -74,21 +87,24 @@ func Create(rawName string, ip string, port uint) {
 	}
 
 	// 模版数据组装
-	projName, err := comm.RawName2ProjName(rawName)
+	projName, err := comm.RawName2ProjName(lastDir)
 	if err != nil {
 		panic(err)
 	}
-	prefixFromGoSrcPath, err := comm.GetPrefixFromGoSrcPath()
-	if err != nil {
-		panic(err)
-	}
+	/*
+		prefixFromGoSrcPath, err := comm.GetPrefixFromGoSrcPath()
+		if err != nil {
+			panic(err)
+		}
+	*/
 	tplData := model.NewTplModel()
+	tplData.GoModulePath = rawName
 	tplData.Date = time.Now()
 	tplData.RawName = rawName
-	dirName, _ := comm.RawName2DirName(rawName)
+	dirName, _ := comm.RawName2DirName(lastDir)
 	tplData.DirName = dirName
 	tplData.ProjName = projName
-	tplData.PrefixFromGoSrcPath = prefixFromGoSrcPath
+	// tplData.PrefixFromGoSrcPath = prefixFromGoSrcPath
 	tplData.SvrIp = ip
 	tplData.SvrPort = uint32(port)
 

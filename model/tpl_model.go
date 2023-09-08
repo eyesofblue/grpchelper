@@ -11,7 +11,8 @@ type TplModel struct {
 	Date                time.Time `json:"time"`
 	SvrIp               string    `json:"svrIp"`
 	SvrPort             uint32    `Json:"svrPort"`
-	PrefixFromGoSrcPath string    `Json:"prefixFromGoSrcPath"`
+	PrefixFromGoSrcPath string    `Json:"prefixFromGoSrcPath"` // GoPath模式使用 go mod下弃用
+	GoModulePath        string    `json:"goModulePath"`        // go mod init参数,默认使用rawName
 }
 
 func NewTplModel() *TplModel {

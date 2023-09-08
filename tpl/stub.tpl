@@ -2,7 +2,7 @@ package stub
 
 import (
 	"github.com/eyesofblue/grpchelper/logic"
-	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/pb"
+	"{{.GoModulePath}}/pb"
 )
 
 // <DO NOT MODIFY THIS LINE> __GRPC_HELPER_SEGMENT_STUB_NEWREQ_BEGIN__

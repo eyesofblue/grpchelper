@@ -84,6 +84,15 @@ func GetPrefixFromGoSrcPath() (string, error) {
 	return string(ret), nil
 }
 
+// 从传入的path中获取最后一个dir
+func GetLastDirFromPath(path string) string {
+	index := strings.LastIndex(path, "/")
+	if index < 0 {
+		return path
+	}
+	return path[index+1:]
+}
+
 func PathExist(path string) bool {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -109,7 +118,7 @@ func IsValidRawName(rawName string) bool {
 	return !regexp.MustCompile(pattern).MatchString(rawName)
 }
 
-//abc_def_g ->AbcDefG
+// abc_def_g ->AbcDefG
 func CapitalizeStr(str string) string {
 	splitList := strings.Split(str, "_")
 	var upperStr string

@@ -2,7 +2,8 @@ package handler
 import (
 	"errors"
     "golang.org/x/net/context"
-	"{{.PrefixFromGoSrcPath}}/{{.DirName}}/pb"
+	// "{{.PrefixFromGoSrcPath}}/{{.DirName}}/pb"
+	"{{.GoModulePath}}/pb"
 )
 
 type RpcHandler struct {
