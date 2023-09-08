@@ -118,6 +118,11 @@ func IsValidRawName(rawName string) bool {
 	return !regexp.MustCompile(pattern).MatchString(rawName)
 }
 
+func IsValidPath(path string) bool {
+	pattern := `[^a-zA-Z0-9_./]+`
+	return !regexp.MustCompile(pattern).MatchString(path)
+}
+
 // abc_def_g ->AbcDefG
 func CapitalizeStr(str string) string {
 	splitList := strings.Split(str, "_")

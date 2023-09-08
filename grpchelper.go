@@ -34,8 +34,8 @@ func main() {
 
 	flag.Parse()
 
-	if !comm.IsValidRawName(rawName) {
-		fmt.Println("Invalid name")
+	if !comm.IsValidPath(rawName) {
+		fmt.Println("Invalid module path")
 		os.Exit(-1)
 	}
 	switch cmd {
